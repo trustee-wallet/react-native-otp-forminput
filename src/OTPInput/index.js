@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react'
 import {
     TextInput,
     Keyboard,
@@ -56,6 +56,7 @@ const OTPInput = ({
         } else if (e === "") {
             const copyState = [...state];
             copyState[index] = e;
+            keyboardClose(copyState);
             setState(copyState);
             if (copyState.join("").length > 0 && index !== 0) {
                 setIndexState(indexState - 1);
@@ -64,6 +65,7 @@ const OTPInput = ({
         } else {
             const copyState = [...state];
             copyState[index] = e;
+            keyboardClose(copyState);
             setState(copyState);
             if (
                 copyState.join("").length < numberOfInputs &&
@@ -79,9 +81,9 @@ const OTPInput = ({
         }
     };
 
-    const keyboardClose = () => {
-        if (state.length > 0) {
-            onChange(state.join(""));
+    const keyboardClose = (text) => {
+        if (text.length > 0) {
+            onChange(text.join(""));
         }
     };
 
@@ -103,13 +105,6 @@ const OTPInput = ({
         if (state.length === 0) {
             filterData();
         }
-        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-            keyboardClose();
-        });
-
-        return () => {
-            hideSubscription.remove();
-        };
     }, [state]);
 
     const handleBlur = () => {
