@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     TextInput,
     Keyboard,
@@ -34,7 +34,7 @@ const OTPInput = ({
                   }) => {
     const inputRef = useRef([]);
     const [state, setState] = useState([]);
-    const [indexState, setIndexState] = useState(0);
+    const [indexState, setIndexState] = useState(null);
 
     const handleKeyPress = ({nativeEvent: {key: keyValue}}) => {
         if (keyValue === "Backspace") {
@@ -112,6 +112,10 @@ const OTPInput = ({
         };
     }, [state]);
 
+    const handleBlur = () => {
+        setIndexState(false)
+    }
+
     return (
         <View style={styles.main}>
             {imageUrl && (
@@ -159,6 +163,7 @@ const OTPInput = ({
                             onFocus={() => {
                                 setIndexState(index);
                             }}
+                            onBlur={handleBlur}
                             selectionColor={cursorColor}
                             keyboardType={keyboardType}
                             onKeyPress={handleKeyPress}
