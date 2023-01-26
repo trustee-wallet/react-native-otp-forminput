@@ -37,8 +37,32 @@ const OTPInput = ({
     const [indexState, setIndexState] = useState(null);
 
     const handleKeyPress = ({nativeEvent: {key: keyValue}}) => {
+        const prevIndex = indexState - 1
+        const nextIndex = indexState + 1
+        const nextValue = inputRef.current[nextIndex]?._internalFiberInstanceHandleDEV?.pendingProps?.value
+        const currentValue = inputRef.current[indexState]?._internalFiberInstanceHandleDEV?.pendingProps?.value
         if (keyValue === "Backspace") {
-            inputRef.current[indexState - 1]?.focus();
+            if (indexState !== 0) {
+                if (currentValue === '') {
+                    setIndexState(prevIndex)
+                    inputRef.current[prevIndex]?.focus()
+                }
+            }
+        } else {
+            if (indexState !== numberOfInputs - 1) {
+                setIndexState(nextIndex)
+                inputRef.current[nextIndex]?.focus()
+                if (currentValue !== '') {
+                    if (nextValue === '') {
+                        const copyState = [...state]
+                        copyState[nextIndex] = keyValue
+                        keyboardClose(copyState)
+                        setState(copyState)
+                    }
+                }
+            } else {
+                Keyboard.dismiss()
+            }
         }
     }
 
@@ -58,26 +82,11 @@ const OTPInput = ({
             copyState[index] = e;
             keyboardClose(copyState);
             setState(copyState);
-            if (copyState.join("").length > 0 && index !== 0) {
-                setIndexState(indexState - 1);
-                inputRef.current[indexState - 1].focus();
-            }
         } else {
             const copyState = [...state];
             copyState[index] = e;
             keyboardClose(copyState);
             setState(copyState);
-            if (
-                copyState.join("").length < numberOfInputs &&
-                index !== numberOfInputs - 1
-            ) {
-                setIndexState(indexState + 1);
-                inputRef.current[indexState + 1]?.focus();
-            }
-
-            if (copyState.join("").length === numberOfInputs && onFilledCode) {
-                Keyboard.dismiss();
-            }
         }
     };
 
