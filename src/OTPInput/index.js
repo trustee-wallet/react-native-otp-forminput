@@ -83,14 +83,12 @@ const OTPInput = ({
             copyState[index] = e;
             keyboardClose(copyState);
             stateRef.current = copyState
-            console.log(stateRef.current)
             setState(copyState);
         } else {
             const copyState = [...state];
             copyState[index] = e;
             keyboardClose(copyState);
             stateRef.current = copyState
-            console.log(stateRef.current)
             setState(copyState);
         }
     };
