@@ -33,14 +33,15 @@ const OTPInput = ({
                       pasteValue = false
                   }) => {
     const inputRef = useRef([]);
+    const stateRef = useRef(["", "", "", "", "", ""])
     const [state, setState] = useState([]);
     const [indexState, setIndexState] = useState(null);
 
     const handleKeyPress = ({nativeEvent: {key: keyValue}}) => {
         const prevIndex = indexState - 1
         const nextIndex = indexState + 1
-        const nextValue = inputRef.current[nextIndex]?._internalFiberInstanceHandleDEV?.pendingProps?.value
-        const currentValue = inputRef.current[indexState]?._internalFiberInstanceHandleDEV?.pendingProps?.value
+        const nextValue = stateRef.current[nextIndex]
+        const currentValue = stateRef.current[indexState]
         if (keyValue === "Backspace") {
             if (indexState !== 0) {
                 if (currentValue === '') {
@@ -81,11 +82,15 @@ const OTPInput = ({
             const copyState = [...state];
             copyState[index] = e;
             keyboardClose(copyState);
+            stateRef.current = copyState
+            console.log(stateRef.current)
             setState(copyState);
         } else {
             const copyState = [...state];
             copyState[index] = e;
             keyboardClose(copyState);
+            stateRef.current = copyState
+            console.log(stateRef.current)
             setState(copyState);
         }
     };
@@ -168,6 +173,7 @@ const OTPInput = ({
                                 setIndexState(index);
                             }}
                             onBlur={handleBlur}
+                            selection={{ start: 1, end: 1 }}
                             selectionColor={cursorColor}
                             keyboardType={keyboardType}
                             onKeyPress={handleKeyPress}
